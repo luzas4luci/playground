@@ -1,5 +1,5 @@
-# Playbook de cadencia · PreZero Líderes
-> Versión 3 · completo
+# Playbook de comunicaciones · PreZero Líderes
+> Versión 4 · revisado
 
 ---
 
@@ -11,10 +11,10 @@ CAPA BASE · Todos los usuarios PreZero (F0–F7 tipo Meliá)
     └─→ CAPA LÍDER (solo centros viables bucket A)
             L0 → L1 → L2
                   ↕
-                  L3 (ciclo de rescate)
+                  L3 (intervención)
 ```
 
-Un líder recibe **ambas capas**: sigue siendo usuario con plan individual + recibe la cadencia líder encima.
+Un líder recibe **ambas capas**: sigue siendo usuario con plan individual + recibe las comunicaciones de líder encima.
 
 ---
 
@@ -36,7 +36,7 @@ Un líder recibe **ambas capas**: sigue siendo usuario con plan individual + rec
 |--------|-------------|
 | `pending` | Hay una acción que hacer ahora mismo |
 | `waiting` | La siguiente acción no toca todavía |
-| `complete` | La cadencia de esta fase está completa |
+| `complete` | Las comunicaciones de esta fase están completas |
 
 ---
 
@@ -59,8 +59,8 @@ Un líder recibe **ambas capas**: sigue siendo usuario con plan individual + rec
 **Definición:** Designado por Alex · aún no ha organizado su primer warmup grupal.
 
 **Sub-estados:**
-- `L0a` · recién nominado → cadencia activa 21 días
-- `L0b` · intentado → activación fallida, sin cadencia, espera revisión trimestral
+- `L0a` · recién nominado → seguimiento activo 21 días
+- `L0b` · intentado → activación fallida, sin seguimiento, espera revisión trimestral
 
 **Salida a L1:** Primer warmup grupal reportado.
 **Salida a L0b:** 21 días sin warmup + aviso final (day-20) completado.
@@ -205,29 +205,29 @@ output:
 | **Completa** | Manual — último paso antes de L0b |
 
 **A · Aurya · leído:**
-> {Nombre}, vamos a pausar la cadencia por ahora. Alex lo revisará en la próxima revisión trimestral. Si en cualquier momento quieres retomar el rol de líder de warmup en {Centro}, escríbeme aquí y lo activamos al instante.
+> {Nombre}, vamos a dejarlo aquí por ahora. Alex lo verá en la próxima revisión trimestral. Si en cualquier momento quieres retomar el rol de líder de warmup en {Centro}, escríbeme aquí y lo activamos al instante.
 
 **B · Aurya · no leído:**
-> {Nombre}, no hemos podido conectar estas semanas. Vamos a pausar por ahora — el rol sigue siendo tuyo si quieres retomarlo. Escríbeme cuando estés listo.
+> {Nombre}, no hemos podido conectar estas semanas. Lo dejamos aquí por ahora — el rol sigue siendo tuyo si quieres retomarlo. Escríbeme cuando estés listo.
 
 **C · Push · leído:**
-> {Nombre}, cerramos el ciclo de activación. El rol sigue siendo tuyo — reactívalo cuando quieras.
+> {Nombre}, lo dejamos aquí por ahora. El rol sigue siendo tuyo — retómalo cuando quieras.
 
 **D · Push · no leído:**
-> {Nombre}, pausamos por ahora. El warmup en {Centro} te espera cuando quieras retomarlo.
+> {Nombre}, lo dejamos aquí por ahora. El warmup en {Centro} te espera cuando quieras retomarlo.
 
 **E · WhatsApp Lorena · leído:**
-> Hola {Nombre}, soy Lorena. Vamos a dejar aquí la activación por ahora — hemos intentado conectar varias veces y entiendo que ahora no es el momento. El rol de líder de warmup sigue siendo tuyo: cuando quieras retomarlo, me escribes aquí y lo activamos al instante. Alex lo verá en la próxima revisión trimestral. Un saludo.
+> Hola {Nombre}, soy Lorena. Vamos a dejarlo aquí por ahora — hemos intentado conectar varias veces y entiendo que ahora no es el momento. El rol de líder de warmup sigue siendo tuyo: cuando quieras retomarlo, me escribes aquí y lo activamos al instante. Alex lo verá en la próxima revisión trimestral. Un saludo.
 
 **F · WhatsApp Lorena · no leído:**
-> Hola {Nombre}, soy Lorena de Fisify. He intentado escribirte estas semanas para arrancar con el warmup en {Centro}, pero no hemos podido conectar. Lo entiendo — hay épocas muy cargadas. Vamos a pausar por ahora, pero el rol sigue siendo tuyo. Cuando quieras retomarlo, me escribes y lo activamos al momento. Un saludo.
+> Hola {Nombre}, soy Lorena de Fisify. He intentado escribirte estas semanas para arrancar con el warmup en {Centro}, pero no hemos podido conectar. Lo entiendo — hay épocas muy cargadas. Lo dejamos aquí por ahora, pero el rol sigue siendo tuyo. Cuando quieras retomarlo, me escribes y lo activamos al momento. Un saludo.
 
 ---
 
 ## noInterestEligible · → L0b
 
 **Condición:** Día 21+ sin warmup reportado Y `day-20` completado.
-**Acción:** Marcar como `L0b · intentado`. Sin cadencia activa. Espera revisión trimestral.
+**Acción:** Marcar como `L0b · intentado`. Sin seguimiento activo. Espera revisión trimestral.
 
 ---
 
@@ -252,7 +252,7 @@ Nominación (isLeader: true)
 [day-20]          Chat/Push/WA · cierre                  ← manual
   │ Día 21+
   ▼
-[L0b]             Intentado · sin cadencia · revisión trimestral
+[L0b]             Intentado · sin seguimiento · revisión trimestral
 ```
 
 ---
@@ -269,7 +269,7 @@ Nominación (isLeader: true)
 
 | Warmups | Plan propio | Lectura | Modulación |
 |---------|-------------|---------|------------|
-| ✅ | ✅ | Líder pleno · ideal | Playbook base sin cambio |
+| ✅ | ✅ | Líder pleno · ideal | Mensajes base sin cambio |
 | ✅ | ❌ | Cumple pero no es ejemplo | Push semanal extra · "predica con el ejemplo" |
 | ❌ | ✅ | Líder dormido | → L3a |
 | ❌ | ❌ | Caído | → L3b |
@@ -321,44 +321,65 @@ Se ejecuta **una sola vez** al entrar en L1. Objetivo: celebrar, fijar expectati
 
 ---
 
-## Track B · Mantenimiento semanal (recurrente)
+## Track B · Seguimiento semanal (recurrente)
 
 **Lógica clave:** Si el líder está en diana → `kind: waiting`, no se manda nada.
 Solo se activa cuando cae bajo diana.
 
+**Cuando está bajo diana: 2 touchpoints separados dentro de la misma semana.**
+El segundo se cancela automáticamente si el líder reporta un warmup entre medias.
+
 ```
 Cada semana de reporte:
-├── ≥ diana del tier           → kind: waiting (sin mensaje)
-├── < diana, semana 1 aislada  → kind: pending · push + chat Aurya (trigger reactivo)
-├── < diana, 2 sem seguidas    → kind: pending · WA Lorena
-└── < diana, 3 sem seguidas    → exit a L3
+├── ≥ diana del tier
+│     → kind: waiting (sin mensaje)
+│
+├── < diana, semana 1
+│     Día de cierre de semana   → Push (señal inmediata)
+│     Día +3                    → Aurya chat (seguimiento · se cancela si reporta warmup)
+│     Frecuencia máxima: 1 vez cada 14 días
+│
+├── < diana, 2 semanas seguidas
+│     Día de cierre             → Aurya chat
+│     Día +2                    → WhatsApp Lorena
+│
+└── < diana, 3 semanas seguidas → exit a L3
 ```
 
-### Trigger reactivo — 1 semana bajo diana (aislada)
+---
 
-**Frecuencia máxima:** 1 vez cada 14 días.
-**Canal:** Push + chat Aurya.
+### 1 semana bajo diana · Día de cierre
 
-**Push:**
+**Canal:** Push
+
 > {Nombre}, esta semana bajó el ritmo en {Centro}. ¿Todo bien?
 
-**Mensaje Aurya:**
+---
+
+### 1 semana bajo diana · Día +3 (si no reportó warmup)
+
+**Canal:** Chat in-app (Aurya)
+
+**Aurya (líder pleno — warmup ✅ + plan ✅):**
 > Oye {Nombre}, vi que esta semana el warmup bajó un poco en {Centro}. Si fue algo puntual no pasa nada — ¿qué pasó? Así vemos si hay que ajustar algo o si fue solo una semana rara.
 
-**Versión "líder pleno" (✅ warmup + ✅ plan):** igual que arriba.
-**Versión "cumple pero no ejemplo" (✅ warmup + ❌ plan):**
+**Aurya (cumple pero no es ejemplo — warmup ✅ + plan ❌):**
 > {Nombre}, esta semana el equipo notó que el warmup bajó. Tú eres el referente en {Centro} — cuando el líder va, el equipo va. ¿Qué pasó?
 
 ---
 
-### 2 semanas seguidas bajo diana
+### 2 semanas seguidas bajo diana · Día de cierre
 
-**Canal:** WhatsApp Lorena + chat Aurya.
+**Canal:** Chat in-app (Aurya)
 
-**Mensaje Aurya:**
 > {Nombre}, llevan dos semanas con el warmup por debajo de lo esperado en {Centro}. ¿Hay algo que esté pasando en el equipo o en la operativa que lo esté frenando?
 
-**Mensaje WhatsApp Lorena:**
+---
+
+### 2 semanas seguidas bajo diana · Día +2
+
+**Canal:** WhatsApp Lorena
+
 > Hola {Nombre}, soy Lorena. He visto que las últimas dos semanas el warmup grupal en {Centro} ha bajado. ¿Puedo ayudarte con algo? Cuéntame qué está pasando y lo vemos juntos.
 
 ---
@@ -367,22 +388,22 @@ Cada semana de reporte:
 
 **Condición:** Líder tier Mantener (7/7) cae a 5/7 en 1 semana aislada.
 **Frecuencia:** Máximo 1 cada 14 días.
-**Canal:** Push + chat Aurya.
+**Canal:** Push + chat Aurya (mismo espaciado: push inmediato, Aurya día +3).
 
 **Push:**
 > Tu equipo está en racha · no la cortes hoy 🔥
 
-**Mensaje Aurya:**
+**Aurya (día +3, si no reportó warmup):**
 > {Nombre}, esta semana bajó un poco pero el equipo lleva una racha buena en {Centro}. Hoy es buen día para el warmup — no rompas la inercia.
 
 ---
 
-## Transición L1 → L2 · Momento especial (8 semanas en diana)
+## Transición L1 → L2 (8 semanas en diana)
 
 **Canal:** Push + WhatsApp Lorena + in-app especial (modal/badge · pendiente spec con Inhar).
 
 **Push:**
-> {Nombre}, 8 semanas seguidas en diana 🏆 Ya eres Líder Consolidado en {Centro}.
+> {Nombre}, 8 semanas seguidas en diana 🏆 El equipo de {Centro} ya lo tiene.
 
 **Mensaje WhatsApp Lorena:**
 > {Nombre}! 🎉 8 semanas seguidas cumpliendo el objetivo en {Centro}. Eso no es casualidad — el equipo ya lo tiene interiorizado. Enhorabuena, estás en un nivel diferente. Alex lo sabe y lo valora.
@@ -393,26 +414,87 @@ Cada semana de reporte:
 
 ---
 
-# L2 · Consolidado
+# L2 · En racha
 
-**Definición:** 8+ semanas consecutivas cumpliendo diana. Rutina estable sin empuje.
+**Definición:** 8+ semanas consecutivas cumpliendo diana. Rutina estable.
 **Salida a L1:** 3 semanas consecutivas perdiendo diana (L2 nunca cae directo a L3).
 
 **Sub-estados:**
-- `L2 base` · Consolidado estándar — mantiene rutina personal
-- `L2 activo` · Movilizador — mantiene rutina + moviliza al equipo (Alex activa manualmente)
+- `L2 base` · mantiene su propia rutina
+- `L2 activo` · movilizador — mantiene rutina + moviliza al equipo (Alex activa manualmente)
 
 ---
 
-## Seguimiento quincenal · Reconocimiento
+## Seguimiento semanal silencioso
+
+**Igual que L1 Track B, pero con tono más suave. El líder en racha no necesita urgencia — necesita continuidad.**
+
+```
+Cada semana:
+├── ≥ diana
+│     → kind: waiting (sin mensaje)
+│
+├── < diana, semana 1
+│     Día de cierre             → Aurya · check-in suave (no alarmista)
+│     Día +3                    → WhatsApp Lorena (si no reportó warmup)
+│     Frecuencia máxima: 1 vez cada 14 días
+│
+├── < diana, 2 semanas seguidas
+│     Día de cierre             → Aurya + Push
+│     Día +2                    → WhatsApp Lorena
+│
+└── < diana, 3 semanas seguidas → vuelve a L1 (con seguimiento semanal activo)
+```
+
+### 1 semana bajo diana · Día de cierre
+
+**Canal:** Chat in-app (Aurya)
+
+**L2 base:**
+> {Nombre}, ¿qué tal esta semana en {Centro}? Vi que el warmup bajó un poco — si hay algo que esté complicando el ritmo, cuéntame.
+
+**L2 activo:**
+> {Nombre}, esta semana el warmup bajó un poco en {Centro}. ¿Todo bien? Cuando el equipo te ve, cambia el ambiente — cuéntame si hay algo que esté complicando las cosas.
+
+---
+
+### 1 semana bajo diana · Día +3 (si no reportó warmup)
+
+**Canal:** WhatsApp Lorena
+
+> Hola {Nombre}, soy Lorena. Vi que esta semana el warmup bajó un poco en {Centro}. ¿Hay algo en lo que pueda ayudarte? No te escribo para presionarte — solo quiero saber si está todo bien.
+
+---
+
+### 2 semanas seguidas bajo diana · Día de cierre
+
+**Canal:** Chat in-app (Aurya) + Push
+
+**Push:**
+> {Nombre}, dos semanas seguidas bajo el objetivo en {Centro}. ¿Hablamos?
+
+**Aurya:**
+> {Nombre}, llevan dos semanas con el warmup por debajo de lo esperado en {Centro}. No es la tendencia que llevabas — ¿qué está pasando? Cuéntame y lo vemos juntos.
+
+---
+
+### 2 semanas seguidas bajo diana · Día +2
+
+**Canal:** WhatsApp Lorena
+
+> Hola {Nombre}, soy Lorena. Dos semanas seguidas con el warmup por debajo en {Centro}. Quiero entender qué está pasando antes de que se complique más. ¿Tienes un momento esta semana?
+
+---
+
+## Reconocimiento quincenal
 
 **Canal:** Chat in-app (Aurya).
-**Frecuencia:** Cada 2 semanas.
+**Frecuencia:** Cada 2 semanas · solo cuando está en diana.
 
-**Mensaje Aurya (L2 base · Consolidado):**
+**Mensaje Aurya (L2 base):**
 > {Nombre}, semana a semana 💪 El warmup en {Centro} sigue en marcha. Llevas {Semanas} semanas siendo un referente para el equipo. ¿Algo nuevo que quieras contarme?
 
-**Mensaje Aurya (L2 activo · Movilizador):**
+**Mensaje Aurya (L2 activo):**
 > {Nombre}, lo que estás haciendo en {Centro} va más allá del warmup — el equipo te sigue porque confía en ti. Llevas {Semanas} semanas. Alex lo ve y lo valora. ¿Cómo podemos hacer que sea aún más fácil para ti?
 
 ---
@@ -440,29 +522,21 @@ Cada semana de reporte:
 
 ---
 
-## Señal de caída en L2 (trigger reactivo)
-
-Misma lógica que L1 Track B. L2 tiene doble pared antes de L3:
-1. Primera caída → vuelve a L1 (con cadencia activa semanal)
-2. Solo desde L1 puede llegar a L3
-
----
-
 ---
 
 # L3 · En riesgo
 
 **Definición:** Los warmups caen bajo umbral del tier durante 3 semanas consecutivas, o el líder no reporta 2 semanas seguidas.
-**Salida a L1:** Retoma warmups dentro de la ventana de rescate.
-**Salida a L0b:** Rescate fallido → L3c → archivar.
+**Salida a L1:** Retoma warmups dentro de la ventana de intervención.
+**Salida a L0b:** Sin retoma → L3c → archivar.
 
-**Sub-estados — se asignan al entrar y no cambian durante el rescate:**
+**Sub-estado se asigna al entrar y no cambia durante la intervención:**
 
 | Sub-estado | Criterio al entrar | Ventana | Tono |
 |---|---|---|---|
-| L3a · rescate suave | Tiene rehab plan activo con Alex | 14 días | Empático · diagnóstico |
-| L3b · rescate completo | Sin rehab plan | 21 días | Directo · videollamada |
-| L3c · rescate fallido | Sin retomar tras ventana | — | Cierre → L0b |
+| L3a · intervención suave | Tiene rehab plan activo con Alex | 14 días | Empático · diagnóstico |
+| L3b · intervención directa | Sin rehab plan | 21 días | Directo · videollamada |
+| L3c · sin retoma | Sin retomar tras ventana | — | Cierre → L0b |
 
 **Por qué importa el rehab plan:**
 - L3a: Alex ya tiene relación clínica con el líder → el rescate puede apoyarse en esa confianza, tono más suave.
@@ -486,7 +560,7 @@ output:
 
 ---
 
-## L3a · Rescate suave (14 días)
+## L3a · Intervención suave (14 días)
 
 ### Día 0 · Entrada · Diagnóstico
 
@@ -517,7 +591,7 @@ output:
 
 ---
 
-### Día 14 · Límite L3a → escalada a L3b si no retoma
+### Día 14 · Límite · escalada a L3b si no retoma
 
 | | |
 |--|--|
@@ -535,7 +609,7 @@ output:
 
 ---
 
-## L3b · Rescate completo (21 días)
+## L3b · Intervención directa (21 días)
 
 **Entrada desde:** L1/L2 sin rehab plan, **o** escalada desde L3a sin retomar en 14d.
 
@@ -580,11 +654,11 @@ output:
 | **Completa** | Manual |
 
 **Mensaje WhatsApp Lorena:**
-> Hola {Nombre}, llevamos dos semanas en rescate y no hemos podido retomar el ritmo ni hablar con Alex. Entiendo que puede haber cosas fuera de tu control, pero necesito saber si quieres seguir con el rol. ¿Me escribes antes del {fecha límite}? Si no tengo respuesta, Alex revisará el rol en la próxima revisión.
+> Hola {Nombre}, llevamos dos semanas sin poder retomar el ritmo ni hablar con Alex. Entiendo que puede haber cosas fuera de tu control, pero necesito saber si quieres seguir con el rol. ¿Me escribes antes del {fecha límite}? Si no tengo respuesta, Alex revisará el rol en la próxima revisión.
 
 ---
 
-### Día 21 · Cierre → L3c · L0b
+### Día 21 · Cierre → L3c → L0b
 
 | | |
 |--|--|
@@ -593,15 +667,15 @@ output:
 | **Completa** | Manual · último paso |
 
 **Mensaje WhatsApp Lorena:**
-> Hola {Nombre}, cerramos este ciclo aquí. Como no hemos podido retomar el warmup grupal en {Centro}, Alex va a revisar el rol en la próxima revisión trimestral. El rol puede volver a ser tuyo si quieres retomarlo — solo escríbeme y lo reactivamos. Un saludo.
+> Hola {Nombre}, lo dejamos aquí. Como no hemos podido retomar el warmup grupal en {Centro}, Alex va a revisar el rol en la próxima revisión trimestral. El rol puede volver a ser tuyo si quieres retomarlo — solo escríbeme y lo reactivamos. Un saludo.
 
-> 🔴 **Acción:** Marcar L3c → L0b. Sin cadencia activa. Espera revisión trimestral.
+> 🔴 **Acción:** Marcar L3c → L0b. Sin seguimiento activo. Espera revisión trimestral.
 
 ---
 
-## L3c · Rescate fallido
+## L3c · Sin retoma
 
-**Sin cadencia.** El líder queda en L0b hasta revisión trimestral de Alex.
+**Sin seguimiento activo.** El líder queda en L0b hasta revisión trimestral de Alex.
 **Reactivación:** Alex decide manualmente si re-nominar o sustituir.
 
 ---
@@ -611,13 +685,13 @@ output:
 ```
 Warmups caen bajo umbral (3 sem) o sin reporte (2 sem)
   │
-  ├── ¿Tiene rehab plan? → L3a · Rescate suave (14d)
+  ├── ¿Tiene rehab plan? → L3a · Intervención suave (14d)
   │     Día 0:  Chat Aurya + WA Lorena  (diagnóstico)
   │     Día 7:  Chat Aurya              (seguimiento)
   │     Día 14: Push + WA Lorena        (límite)
   │     Sin retoma → escala a L3b
   │
-  └── ¿Sin rehab plan? → L3b · Rescate completo (21d)
+  └── ¿Sin rehab plan? → L3b · Intervención directa (21d)
         Día 0:  Push + WA Lorena        (directo · videollamada)
         Día 7:  Push + Chat Aurya       (seguimiento videollamada)
         Día 14: WA Lorena               (aviso crítico)
