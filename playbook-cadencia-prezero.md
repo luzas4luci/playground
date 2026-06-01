@@ -1,15 +1,42 @@
 # Playbook de cadencia · PreZero Líderes
-> Versión 1 · base para implementación
+> Versión 2 · documento vivo · pendiente cierre L3
 
 ---
 
-## Quién habla en cada canal
+## Arquitectura
 
-| Canal | Voz | Tono |
-|-------|-----|------|
-| WhatsApp | **Lorena** (Customer Success) | Humano, directo, empático |
-| Chat in-app | **Aurya** | Cercano, informal, motivador |
-| Push | Notificación del sistema | Corto, accionable |
+```
+CAPA BASE · Todos los usuarios PreZero (F0–F7 tipo Meliá)
+    │
+    └─→ CAPA LÍDER (solo centros viables bucket A)
+            L0 → L1 → L2
+                  ↕
+                  L3 (ciclo de rescate)
+```
+
+Un líder recibe **ambas capas**: sigue siendo usuario con plan individual + recibe la cadencia líder encima.
+
+---
+
+## Canales y quién escribe
+
+| Canal | Voz | Tono | Completa |
+|-------|-----|------|----------|
+| Chat in-app | **Aurya** | Cercano, informal | Automático (mensaje detectado) o manual |
+| Push | Sistema | Corto, accionable | Manual (marcar enviado) |
+| WhatsApp | **Lorena** (CS) | Humano, directo | Manual (marcar enviado) |
+
+**Prioridad de canal:** Chat in-app → Push → WhatsApp
+
+---
+
+## Estados del resolver
+
+| Estado | Significado |
+|--------|-------------|
+| `pending` | Hay una acción que hacer ahora mismo |
+| `waiting` | La siguiente acción no toca todavía |
+| `complete` | La cadencia de esta fase está completa |
 
 ---
 
@@ -18,171 +45,215 @@
 | Variable | Valor |
 |----------|-------|
 | `{Nombre}` | Nombre del líder |
-| `{Centro}` | Nombre del centro (ej. "Talavera") |
-| `{Diana}` | Diana del tier (ej. "7/7", "6/7", "5/7") |
+| `{Centro}` | Nombre del centro |
+| `{Diana}` | Diana del tier (ej. "7/7") |
 | `{Días}` | Días con warmup esta semana |
-| `{Semanas}` | Nº de semanas consecutivas cumpliendo/fallando |
+| `{Semanas}` | Nº semanas consecutivas |
 
 ---
 
-## Diagrama de flujo entre fases
+---
+
+# L0 · No activo
+
+**Definición:** Designado por Alex · aún no ha organizado su primer warmup grupal.
+
+**Sub-estados:**
+- `L0a` · recién nominado → cadencia activa 21 días
+- `L0b` · intentado → activación fallida, sin cadencia, espera revisión trimestral
+
+**Salida a L1:** Primer warmup grupal reportado.
+**Salida a L0b:** 21 días sin warmup + aviso final (day-20) completado.
+
+---
+
+## Resolver L0a
 
 ```
-Nominación (isLeader: true)
-  └─ L0a · Recién nominado
-       ├─ → L1  en cuanto reporta 1er warmup grupal
-       └─ → L0b  21d sin reportar warmup (pausa · revisión trimestral)
+input:
+  nominatedAt           ← fecha de nominación (isLeader: true)
+  leader.cadence.l0.firstWhatsAppAt
+  leader.cadence.l0.manualActions[]   ← { stage, channel, actionKey, completedAt }
+  leader.chatInApp.lastAuryaMessageAt ← para auto-detección
+  leader.pushEnabled
+  leader.hasWhatsApp
+  leader.chatInApp.lastReadAt         ← para condición leído/no leído
 
-L1 · Activo
-  ├─ → L2  8 sem consecutivas en diana del tier
-  └─ → L3  3 sem consecutivas bajo umbral  (o 2 sem sin reportar nada)
-
-L2 · Consolidado
-  └─ → L1  3 sem consecutivas perdiendo diana
-       (L2 nunca cae directo a L3 · doble pared de colchón)
-
-L3 · En riesgo
-  ├─ → L1  recupera dentro de la ventana de rescate
-  └─ → L0b  rescate fallido (L3a: sin retomar en 14d · L3b: sin retomar en 21d)
+output:
+  { kind: 'pending' | 'waiting' | 'complete', stage, channel, message, requiresManual }
 ```
 
----
+**Stages en orden:**
+`first-whatsapp` → `day-3` → `day-7` → `day-14` → `day-20` → `noInterest`
 
-## Tiers de centro · Diana operativa
-
-| Tier | Diana | Umbral (L3 activa) | Umbral crítico (L3b) |
-|------|-------|---------------------|----------------------|
-| Mantener | 7/7 | 5/7 | 3/7 |
-| Cerrar gap | ≥6/7 | 4/7 | 2/7 |
-| Recuperar | ≥5/7 | 3/7 | 1/7 |
+**Timing:** Días naturales (no laborables) desde la fecha de nominación.
 
 ---
 
----
-
-# L0a · Recién nominado
-
-**Objetivo:** Conseguir el primer warmup grupal en ≤21 días.
-**Tiempo:** Días naturales desde la nominación.
-**Ventana total:** 21 días.
-
----
-
-## Día 1 · WhatsApp de bienvenida
+## Stage 1 · first-whatsapp (Día 1)
 
 | | |
 |--|--|
-| **Canal** | WhatsApp |
-| **Quién** | Lorena |
 | **Cuándo** | Día 1 desde nominación |
+| **Antes del día 1** | `kind: waiting` |
+| **A partir del día 1** | `kind: pending` |
+| **Canal** | WhatsApp — Lorena |
 | **Completa** | Manual (marcar enviado) |
 
-**Mensaje:**
-> Hola {Nombre}, soy Lorena del equipo de PreZero. Alex me ha dicho que eres el nuevo líder de warmup en {Centro} 💪 Estoy aquí para ayudarte a arrancar. ¿Tienes un momento esta semana para hacer el primer warmup con tu equipo? Si tienes cualquier duda de cómo funciona, me escribes aquí y te ayudo.
+**Mensaje WhatsApp Lorena:**
+> Hola {Nombre}, soy Lorena del equipo de Fisify. Alex me ha dicho que eres el nuevo líder de warmup en {Centro} 💪 Estoy aquí para ayudarte a arrancar. ¿Cuándo crees que podría ser el primer warmup con tu equipo esta semana? Si tienes cualquier duda, escríbeme aquí.
 
 ---
 
-## Día 3 · Push de activación
+## Stage 2 · day-3 (Día 3)
 
 | | |
 |--|--|
-| **Canal** | Push |
 | **Cuándo** | Día 3 desde nominación |
-| **Condición** | Solo si tiene notificaciones activas |
-| **Sin push** | No bloqueante · se marca automáticamente |
+| **Bloqueo previo** | `first-whatsapp` completado |
+| **Canal** | Push |
+| **Condición** | Solo si `pushEnabled: true` |
+| **Sin push** | **No bloqueante** — se marca automáticamente y pasa al siguiente |
 | **Completa** | Manual (marcar enviado) |
 
 **Texto push:**
-> {Nombre}, tu equipo te espera 💪 ¿Hoy es el día del primer warmup?
+> {Nombre}, tu equipo te espera 💪 ¿Hoy puede ser el primer warmup?
 
 ---
 
-## Día 7 · Aviso 2
+## Stage 3 · day-7 (Día 7)
 
 | | |
 |--|--|
 | **Cuándo** | Día 7 desde nominación |
-| **Bloqueo previo** | Día 3 completado o marcado no bloqueante |
+| **Bloqueo previo** | `day-3` completado o marcado no bloqueante |
+| **Completa** | Automático (mensaje Aurya detectado) o manual |
 
-**Árbol de canal (prioridad: chat → push → WhatsApp):**
+**Árbol de canal — prioridad: chat → push → WhatsApp**
 
 ```
 1. ¿Tiene chat in-app activo?
-   └── SÍ → Aurya in-app  ← automático por mensaje de Aurya
+   └── SÍ → Aurya (auto-detectado por mensaje posterior al día 7)
+              Leído prev.:   mensaje A
+              No leído prev: mensaje B
 
 2. ¿Tiene push activo?
-   └── SÍ → Push  ← MANUAL
+   └── SÍ → Push (manual)
+              Leído prev.:   mensaje C
+              No leído prev: mensaje D
 
 3. ¿Tiene WhatsApp?
-   └── SÍ → WhatsApp Lorena  ← MANUAL
+   └── SÍ → WhatsApp Lorena (manual)
+              Leído prev.:   mensaje E
+              No leído prev: mensaje F
 ```
 
-**Mensaje Aurya (chat in-app):**
-> Hola {Nombre} 👋 ¿Cómo está yendo la semana en {Centro}? Lorena me dijo que eres el nuevo líder de warmup. Si quieres, cuéntame cómo está el equipo y te ayudo a preparar el primero.
+**A · Aurya · leído:**
+> {Nombre}, vi que leíste el mensaje de Lorena 👀 ¿Te pillo en mal momento o es que la semana ha estado muy cargada en {Centro}?
 
-**Texto push:**
-> {Nombre}, ¿ya organizaste el primer warmup? ¡Tu equipo lo está esperando! 🔥
+**B · Aurya · no leído:**
+> Hola {Nombre} 👋 Lorena te escribió la semana pasada pero parece que no llegó bien. Solo quería saber cómo va el tema del primer warmup en {Centro}. ¿Cuándo crees que podría ser?
 
-**Mensaje WhatsApp Lorena:**
-> Hola {Nombre}, te escribo de nuevo para ver cómo va la semana. ¿Has podido organizar algún warmup con el equipo? Si hay algo que te lo esté poniendo difícil (horarios, participación, lo que sea), me cuentas y lo vemos juntos.
+**C · Push · leído:**
+> {Nombre}, leíste el mensaje pero aún no hemos arrancado. ¿Esta semana puede ser el primero? 🔥
+
+**D · Push · no leído:**
+> {Nombre}, Lorena lleva una semana esperando 😏 ¿Le das al equipo el primer warmup esta semana?
+
+**E · WhatsApp Lorena · leído:**
+> Hola {Nombre}, vi que leíste mi mensaje. ¿Qué tal va? Si hay algo que te esté frenando para organizar el warmup en {Centro}, cuéntame — lo vemos juntos.
+
+**F · WhatsApp Lorena · no leído:**
+> Hola {Nombre}, te escribí la semana pasada por la app pero creo que no te llegó. Solo quería saber cómo va el warmup en {Centro} — ¿hay algo que te esté bloqueando para arrancarlo?
 
 ---
 
-## Día 14 · Aviso 3
+## Stage 4 · day-14 (Día 14)
 
 | | |
 |--|--|
 | **Cuándo** | Día 14 desde nominación |
-| **Bloqueo previo** | Día 7 completado |
+| **Bloqueo previo** | `day-7` completado |
+| **Completa** | Automático o manual |
 
-**Árbol de canal:**
+**A · Aurya · leído:**
+> {Nombre}, llevamos dos semanas y todavía no hemos podido arrancar el warmup grupal en {Centro}. Es normal que cueste al principio — después va solo. ¿Qué es lo que más te está frenando ahora mismo?
 
-```
-1. ¿Tiene chat in-app activo?
-   └── SÍ → Aurya in-app  ← automático
+**B · Aurya · no leído:**
+> {Nombre}, te hemos mandado un par de mensajes estas semanas. Sé que estás liado, pero el primer warmup es el más difícil — después el equipo lo pide solo. ¿Qué es lo que más te está costando?
 
-2. ¿Tiene push activo?
-   └── SÍ → Push  ← MANUAL
+**C · Push · leído:**
+> {Nombre}, dos semanas sin warmup grupal en {Centro}. ¿Hoy puede ser el día? 💪
 
-3. ¿Tiene WhatsApp?
-   └── SÍ → WhatsApp Lorena  ← MANUAL
-```
+**D · Push · no leído:**
+> {Nombre}, Lorena sigue esperando 📲 Solo necesitamos un primer warmup esta semana.
 
-**Mensaje Aurya (chat in-app):**
-> {Nombre}, llevamos dos semanas desde que te nombraron líder. Es normal que arrancar cueste — los primeros warmups son los más raros. Pero una vez que el equipo engancha, va solo. ¿Qué es lo que más te está frenando ahora mismo?
+**E · WhatsApp Lorena · leído:**
+> Hola {Nombre}, soy Lorena. Han pasado dos semanas y todavía no hemos arrancado con el warmup en {Centro}. No te escribo para presionarte — quiero entender qué está pasando. ¿Tienes 5 minutos para contarme?
 
-**Texto push:**
-> {Nombre}, quedan pocos días para que el primer warmup cuente 🕐 ¿Hoy puede ser?
-
-**Mensaje WhatsApp Lorena:**
-> Hola {Nombre}, soy Lorena. Sé que arrancar no siempre es fácil, pero quería escribirte antes de que se acabe el mes. Si el problema es el equipo, los horarios o simplemente no saber cómo empezar, dímelo y lo resolvemos juntos. Tú tienes el rol, solo falta dar el primer paso.
+**F · WhatsApp Lorena · no leído:**
+> Hola {Nombre}, soy Lorena de Fisify. Te he mandado un par de mensajes estas semanas. Sé que hay épocas muy cargadas, pero quería escribirte antes de cerrar el mes. El warmup grupal en {Centro} todavía no ha arrancado — ¿qué está pasando?
 
 ---
 
-## Día 21 · Cierre / paso a L0b
+## Stage 5 · day-20 (Día 20) · Cierre
 
 | | |
 |--|--|
-| **Cuándo** | Día 21 desde nominación |
-| **Bloqueo previo** | Día 14 completado |
-| **Completa** | Manual · último paso antes de marcar L0b |
+| **Cuándo** | Día 20 desde nominación |
+| **Bloqueo previo** | `day-14` completado |
+| **Completa** | Manual — último paso antes de L0b |
 
-**Árbol de canal:**
+**A · Aurya · leído:**
+> {Nombre}, vamos a pausar la cadencia por ahora. Alex lo revisará en la próxima revisión trimestral. Si en cualquier momento quieres retomar el rol de líder de warmup en {Centro}, escríbeme aquí y lo activamos al instante.
+
+**B · Aurya · no leído:**
+> {Nombre}, no hemos podido conectar estas semanas. Vamos a pausar por ahora — el rol sigue siendo tuyo si quieres retomarlo. Escríbeme cuando estés listo.
+
+**C · Push · leído:**
+> {Nombre}, cerramos el ciclo de activación. El rol sigue siendo tuyo — reactívalo cuando quieras.
+
+**D · Push · no leído:**
+> {Nombre}, pausamos por ahora. El warmup en {Centro} te espera cuando quieras retomarlo.
+
+**E · WhatsApp Lorena · leído:**
+> Hola {Nombre}, soy Lorena. Vamos a dejar aquí la activación por ahora — hemos intentado conectar varias veces y entiendo que ahora no es el momento. El rol de líder de warmup sigue siendo tuyo: cuando quieras retomarlo, me escribes aquí y lo activamos al instante. Alex lo verá en la próxima revisión trimestral. Un saludo.
+
+**F · WhatsApp Lorena · no leído:**
+> Hola {Nombre}, soy Lorena de Fisify. He intentado escribirte estas semanas para arrancar con el warmup en {Centro}, pero no hemos podido conectar. Lo entiendo — hay épocas muy cargadas. Vamos a pausar por ahora, pero el rol sigue siendo tuyo. Cuando quieras retomarlo, me escribes y lo activamos al momento. Un saludo.
+
+---
+
+## noInterestEligible · → L0b
+
+**Condición:** Día 21+ sin warmup reportado Y `day-20` completado.
+**Acción:** Marcar como `L0b · intentado`. Sin cadencia activa. Espera revisión trimestral.
+
+---
+
+## Resumen visual L0a
 
 ```
-1. ¿Tiene chat in-app activo?
-   └── SÍ → Aurya in-app  ← automático
-
-2. WhatsApp Lorena  ← MANUAL (siempre, como cierre)
+Nominación (isLeader: true)
+  │ Día 1
+  ▼
+[first-whatsapp]  WhatsApp Lorena · bienvenida          ← manual
+  │ Día 3
+  ▼
+[day-3]           Push activación (si push, si no: skip) ← manual / non-blocking
+  │ Día 7
+  ▼
+[day-7]           Chat/Push/WA · leído vs no leído       ← auto o manual
+  │ Día 14
+  ▼
+[day-14]          Chat/Push/WA · tono más directo        ← auto o manual
+  │ Día 20
+  ▼
+[day-20]          Chat/Push/WA · cierre                  ← manual
+  │ Día 21+
+  ▼
+[L0b]             Intentado · sin cadencia · revisión trimestral
 ```
-
-**Mensaje Aurya (chat in-app):**
-> {Nombre}, vamos a dejarlo aquí por ahora. Alex revisará tu caso en la próxima revisión trimestral. Si en cualquier momento quieres retomar el rol, un mensaje aquí y lo activamos al instante.
-
-**Mensaje WhatsApp Lorena:**
-> Hola {Nombre}, te escribo para cerrar el loop de este mes. Como no hemos podido arrancar con los warmups, vamos a pausar por ahora. Pero el rol sigue siendo tuyo si quieres retomarlo — solo escríbeme y lo reactivamos. Alex lo verá en la próxima revisión. Un saludo.
-
-> 🔴 **Acción:** Marcar como L0b · intentado.
 
 ---
 
@@ -190,77 +261,133 @@ L3 · En riesgo
 
 # L1 · Activo
 
-**Objetivo:** Sostener los warmups grupales dentro de la diana del tier durante 8 semanas consecutivas para consolidar en L2.
-**Tiempo:** Semanas de reporte.
-**Ancla de seguimiento:** Último reporte semanal de warmups.
+**Definición:** Ha reportado al menos 1 warmup grupal. Organiza con regularidad.
+**Salida a L2:** 8 semanas consecutivas en diana del tier.
+**Salida a L3:** 3 semanas consecutivas bajo umbral, o 2 semanas sin reportar nada.
 
-El cuadrante L1 modula el **tono** pero no la **estructura**:
+**Cuadrante 2×2 — modula el tono, no la estructura:**
 
 | Warmups | Plan propio | Lectura | Modulación |
 |---------|-------------|---------|------------|
-| Sí | Sí | L1 pleno · ideal | Playbook base sin cambio |
-| Sí | No | Cumple pero no es ejemplo | Push extra semanal · "predica con el ejemplo" |
-| No | Sí | Líder dormido | Baja a L3 · tag rescate suave |
-| No | No | Caído | Baja a L3 · tag rescate completo |
+| ✅ | ✅ | Líder pleno · ideal | Playbook base sin cambio |
+| ✅ | ❌ | Cumple pero no es ejemplo | Push semanal extra · "predica con el ejemplo" |
+| ❌ | ✅ | Líder dormido | → L3a |
+| ❌ | ❌ | Caído | → L3b |
 
 ---
 
-## Track A · Seguimiento semanal (cada 7 días)
+## Track A · Onboarding (días 1–7 desde el primer warmup)
 
-**Cuándo:** Cada semana de reporte, si el líder está en diana.
-**Canal principal:** Chat in-app (Aurya) · automático si hay mensaje posterior al reporte.
+Se ejecuta **una sola vez** al entrar en L1. Objetivo: celebrar, fijar expectativas, establecer diana.
 
-**Mensaje Aurya (semana normal, en diana):**
-> {Nombre}, {Días}/7 esta semana 💪 El equipo está respondiendo. ¿Algo que quieras ajustar para la semana que viene?
+### Día 1 · Celebración del primer warmup
 
-**Mensaje Aurya (semana con plan propio, sin warmup grupal — L1 "cumple no es ejemplo"):**
-> {Nombre}, esta semana hiciste tu plan personal pero el warmup grupal no salió. El equipo nota cuando el líder lleva al grupo — ¿qué pasó esta semana?
+| | |
+|--|--|
+| **Canal** | Chat in-app (Aurya) |
+| **Completa** | Automático (mensaje detectado) |
+
+**Mensaje Aurya:**
+> ¡{Nombre}! 🎉 Primer warmup grupal en {Centro} hecho. Así se empieza. La diana esta semana es {Diana} — dime cómo va y cualquier cosa que necesites, aquí estoy.
 
 ---
 
-## Track B · Señal de caída (reactivo)
+### Día 3 · Check-in rápido
 
-Se activa cuando el líder cae bajo umbral durante **1 semana aislada** (no consecutiva).
+| | |
+|--|--|
+| **Canal** | Push |
+| **Condición** | Solo si `pushEnabled` |
+| **Sin push** | No bloqueante |
+| **Completa** | Manual |
 
-> ⚠️ Este trigger es cross-fase y también aplica en L2. Se llama "Tu equipo está en racha · no lo cortes hoy".
+**Texto push:**
+> {Nombre}, ¿cómo va el equipo en {Centro} esta semana? 💪
 
-**Condición:** Líder en tier Mantener (7/7) cae a 5/7 en 1 semana aislada.
+---
+
+### Día 7 · Primera revisión semanal
+
+| | |
+|--|--|
+| **Canal** | Chat in-app (Aurya) |
+| **Completa** | Automático o manual |
+
+**Mensaje Aurya (hizo diana):**
+> {Nombre}, primera semana completada 💪 {Días}/7 días con warmup. Así se consolida el hábito. ¿Algo que quieras ajustar para la semana que viene?
+
+**Mensaje Aurya (no hizo diana):**
+> {Nombre}, primera semana con {Días}/7. No está mal para empezar — la diana es {Diana}. ¿Qué pasó los días que no salió? Así vemos si hay algo que ajustar.
+
+---
+
+## Track B · Mantenimiento semanal (recurrente)
+
+**Lógica clave:** Si el líder está en diana → `kind: waiting`, no se manda nada.
+Solo se activa cuando cae bajo diana.
+
+```
+Cada semana de reporte:
+├── ≥ diana del tier           → kind: waiting (sin mensaje)
+├── < diana, semana 1 aislada  → kind: pending · push + chat Aurya (trigger reactivo)
+├── < diana, 2 sem seguidas    → kind: pending · WA Lorena
+└── < diana, 3 sem seguidas    → exit a L3
+```
+
+### Trigger reactivo — 1 semana bajo diana (aislada)
+
 **Frecuencia máxima:** 1 vez cada 14 días.
-**Canal:** Push + chat in-app.
+**Canal:** Push + chat Aurya.
 
 **Push:**
-> {Nombre}, esta semana bajó un poco el ritmo. ¿Todo bien en {Centro}?
+> {Nombre}, esta semana bajó el ritmo en {Centro}. ¿Todo bien?
 
-**Mensaje Aurya (chat in-app):**
-> Oye {Nombre}, vi que esta semana bajó el warmup grupal. No pasa nada si fue algo puntual — ¿qué pasó? Así vemos si hay algo que ajustar o si fue solo una semana rara.
+**Mensaje Aurya:**
+> Oye {Nombre}, vi que esta semana el warmup bajó un poco en {Centro}. Si fue algo puntual no pasa nada — ¿qué pasó? Así vemos si hay que ajustar algo o si fue solo una semana rara.
+
+**Versión "líder pleno" (✅ warmup + ✅ plan):** igual que arriba.
+**Versión "cumple pero no ejemplo" (✅ warmup + ❌ plan):**
+> {Nombre}, esta semana el equipo notó que el warmup bajó. Tú eres el referente en {Centro} — cuando el líder va, el equipo va. ¿Qué pasó?
 
 ---
 
-## Semana 2 consecutiva bajo umbral · Aviso
+### 2 semanas seguidas bajo diana
 
-**Cuándo:** 2 semanas seguidas bajo umbral (no crítico aún).
-**Canal:** Chat in-app + WhatsApp Lorena.
+**Canal:** WhatsApp Lorena + chat Aurya.
 
-**Mensaje Aurya (chat in-app):**
+**Mensaje Aurya:**
 > {Nombre}, llevan dos semanas con el warmup por debajo de lo esperado en {Centro}. ¿Hay algo que esté pasando en el equipo o en la operativa que lo esté frenando?
 
 **Mensaje WhatsApp Lorena:**
-> Hola {Nombre}, soy Lorena. He visto que las últimas dos semanas el warmup grupal ha bajado un poco. ¿Puedo ayudarte con algo? Cuéntame qué está pasando y lo vemos juntos.
+> Hola {Nombre}, soy Lorena. He visto que las últimas dos semanas el warmup grupal en {Centro} ha bajado. ¿Puedo ayudarte con algo? Cuéntame qué está pasando y lo vemos juntos.
 
 ---
 
-## Transición L1 → L2 · Momento especial (8 sem en diana)
+### Trigger cross-fase · "Tu equipo está en racha"
 
-**Cuándo:** 8 semanas consecutivas cumpliendo diana del tier.
-**Canales:** Push + WhatsApp Lorena + in-app especial (modal / badge · por definir con Inhar).
+**Condición:** Líder tier Mantener (7/7) cae a 5/7 en 1 semana aislada.
+**Frecuencia:** Máximo 1 cada 14 días.
+**Canal:** Push + chat Aurya.
 
 **Push:**
-> {Nombre}, 8 semanas seguidas en diana 🏆 ¡Eso es consolidación! Ya eres Líder Consolidado en {Centro}.
+> Tu equipo está en racha · no la cortes hoy 🔥
+
+**Mensaje Aurya:**
+> {Nombre}, esta semana bajó un poco pero el equipo lleva una racha buena en {Centro}. Hoy es buen día para el warmup — no rompas la inercia.
+
+---
+
+## Transición L1 → L2 · Momento especial (8 semanas en diana)
+
+**Canal:** Push + WhatsApp Lorena + in-app especial (modal/badge · pendiente spec con Inhar).
+
+**Push:**
+> {Nombre}, 8 semanas seguidas en diana 🏆 Ya eres Líder Consolidado en {Centro}.
 
 **Mensaje WhatsApp Lorena:**
-> {Nombre}!! 🎉 8 semanas seguidas cumpliendo el objetivo en {Centro}. Eso no es casualidad — es que el equipo ya lo ha interiorizado. Enhorabuena, estás en un nivel diferente. Alex lo sabe y lo valora.
+> {Nombre}! 🎉 8 semanas seguidas cumpliendo el objetivo en {Centro}. Eso no es casualidad — el equipo ya lo tiene interiorizado. Enhorabuena, estás en un nivel diferente. Alex lo sabe y lo valora.
 
-**In-app:** Modal de celebración / badge (especificación pendiente con Inhar).
+**In-app:** Modal de celebración / badge — especificación pendiente con Inhar.
 
 ---
 
@@ -268,17 +395,25 @@ Se activa cuando el líder cae bajo umbral durante **1 semana aislada** (no cons
 
 # L2 · Consolidado
 
-**Objetivo:** Mantener la rutina con apoyo mínimo. Detectar caída antes de que llegue a L3.
-**Cadencia:** Quincenal (cada 2 semanas).
+**Definición:** 8+ semanas consecutivas cumpliendo diana. Rutina estable sin empuje.
+**Salida a L1:** 3 semanas consecutivas perdiendo diana (L2 nunca cae directo a L3).
+
+**Sub-estados:**
+- `L2 base` · Consolidado estándar — mantiene rutina personal
+- `L2 activo` · Movilizador — mantiene rutina + moviliza al equipo (Alex activa manualmente)
 
 ---
 
 ## Seguimiento quincenal · Reconocimiento
 
 **Canal:** Chat in-app (Aurya).
+**Frecuencia:** Cada 2 semanas.
 
-**Mensaje Aurya:**
-> {Nombre}, semana a semana 💪 El warmup en {Centro} sigue en marcha. Llevas {Semanas} semanas siendo un referente. ¿Algo nuevo con el equipo que quieras contarme?
+**Mensaje Aurya (L2 base · Consolidado):**
+> {Nombre}, semana a semana 💪 El warmup en {Centro} sigue en marcha. Llevas {Semanas} semanas siendo un referente para el equipo. ¿Algo nuevo que quieras contarme?
+
+**Mensaje Aurya (L2 activo · Movilizador):**
+> {Nombre}, lo que estás haciendo en {Centro} va más allá del warmup — el equipo te sigue porque confía en ti. Llevas {Semanas} semanas. Alex lo ve y lo valora. ¿Cómo podemos hacer que sea aún más fácil para ti?
 
 ---
 
@@ -287,189 +422,59 @@ Se activa cuando el líder cae bajo umbral durante **1 semana aislada** (no cons
 **Canal:** Email · automático.
 **Cuándo:** Primer lunes de cada mes.
 
-**Asunto:** Resumen de warmup · {Centro} · {Mes}
+**Asunto:** Tu impacto en {Centro} · {Mes}
 
 **Cuerpo:**
 > Hola {Nombre},
 >
 > Aquí tienes el resumen de warmup de {Centro} en {Mes}:
 >
-> - Días con warmup grupal: **{Total días}**
-> - Media semanal: **{Media}/7**
-> - Semanas consecutivas en diana: **{Semanas}**
+> · Días con warmup grupal: **{Total días}**
+> · Media semanal: **{Media}/7**
+> · Semanas consecutivas en diana: **{Semanas}**
 >
-> El equipo lleva una racha sólida. Sigue así.
+> El equipo tiene una racha sólida. Sigue así.
 >
 > Un saludo,
-> El equipo de Fisify
+> Lorena · Fisify
 
 ---
 
-## Señal de caída en L2 (trigger reactivo · igual que L1)
+## Señal de caída en L2 (trigger reactivo)
 
-**Condición:** 1 semana por debajo del tier diana.
-**Canal:** Push + chat in-app.
-
-*(Mismos mensajes que Track B de L1)*
-
----
-
-## Transición L2 → L1 (3 sem perdiendo diana)
-
-No hay mensaje de aviso progresivo — la bajada es automática a L1 cuando se cumplen 3 semanas.
-En L1 vuelve a recibir cadencia activa semanal.
-
-> L2 **nunca cae directo a L3** — pasa por L1 primero (doble pared de colchón).
+Misma lógica que L1 Track B. L2 tiene doble pared antes de L3:
+1. Primera caída → vuelve a L1 (con cadencia activa semanal)
+2. Solo desde L1 puede llegar a L3
 
 ---
 
 ---
 
-# L3a · Rescate suave
+# L3 · En riesgo
 
-**Disparador:** 3 semanas consecutivas bajo umbral (con rehab plan activo al entrar).
-**Ventana:** 14 días para retomar.
-**Tono:** Empático · pregunta diagnóstica · no agresivo.
-**Objetivo:** Entender qué pasó y reactivar los warmups grupales.
-
----
-
-## Día 0 · Entrada a L3a
-
-**Canal:** Chat in-app (Aurya) + WhatsApp Lorena.
-
-**Mensaje Aurya (chat in-app):**
-> {Nombre}, he notado que las últimas semanas el warmup grupal ha bajado bastante en {Centro}. No te escribo para presionarte — a veces hay semanas malas, cambios de turno, cosas de la operativa que se complican. ¿Qué está pasando?
-
-**Mensaje WhatsApp Lorena:**
-> Hola {Nombre}, soy Lorena. Alex me ha dicho que las últimas semanas han sido complicadas en {Centro} con el warmup. ¿Tienes 10 minutos esta semana para contarme qué está pasando? Quiero entenderlo antes de hacer nada.
+> ⚠️ **Definición de sub-estados pendiente de aclaración.**
+>
+> Hay una inconsistencia entre las fichas de diseño y el documento de arquitectura. Antes de escribir los mensajes de L3, necesito confirmar cuál es la definición correcta de L3a, L3b y L3c.
+>
+> **Opción A (imágenes/fichas):**
+> - L3a = rescate suave · líder con rehab plan activo al entrar en L3
+> - L3b = rescate completo · líder sin rehab plan al entrar
+> - L3c = rescate fallido · 21d sin retomar
+>
+> **Opción B (documento de arquitectura):**
+> - L3a = PLENO (warmups ✅ + reporta ✅ + plan prevention)
+> - L3b = PARCIAL (warmups ✅ + falta una pata)
+> - L3c = CLÍNICO (warmups ✅ + rehab con Alex)
 
 ---
 
-## Día 7 · Seguimiento L3a
+## Pendiente de definir
 
-**Canal:** Chat in-app (Aurya).
-
-**Mensaje Aurya:**
-> {Nombre}, ¿cómo va la semana? ¿Has podido organizar algún warmup grupal? Si hay algo que esté bloqueando al equipo, cuéntame — a veces hay que ajustar el formato, el horario o simplemente recuperar el hábito de a poco.
-
----
-
-## Día 14 · Límite L3a
-
-**Sin retomar → escala a L3b.**
-
-**Canal:** WhatsApp Lorena + push.
-
-**Push:**
-> {Nombre}, llevamos dos semanas sin warmup grupal en {Centro}. ¿Hablamos esta semana?
-
-**Mensaje WhatsApp Lorena:**
-> {Nombre}, han pasado dos semanas desde que empezamos el rescate y todavía no hemos podido retomar el ritmo. Necesito que hablemos — ¿tienes un hueco esta semana para una llamada rápida con Alex? Es para ver si podemos ayudarte o si el rol necesita revisarse.
-
-> 🔴 **Acción:** Si no retoma → marcar L3b.
-
----
-
----
-
-# L3b · Rescate completo
-
-**Disparador:** Desde L1 sin rehab plan · o escalada desde L3a sin retomar en 14d.
-**Ventana:** 21 días para retomar.
-**Tono:** Directo · urgente · con oferta de videollamada.
-**Objetivo:** Retomar warmups o cerrar el rol.
-
----
-
-## Día 0 · Entrada a L3b
-
-**Canal:** WhatsApp Lorena (directo y sin rodeos) + push.
-
-**Push:**
-> {Nombre}, el warmup en {Centro} lleva semanas parado. Necesitamos hablar.
-
-**Mensaje WhatsApp Lorena:**
-> Hola {Nombre}, soy Lorena. Voy al grano: el warmup grupal en {Centro} lleva varias semanas por debajo del mínimo y necesitamos resolverlo. ¿Puedes hacer una videollamada con Alex esta semana? No es para revisar lo que pasó — es para ver cómo seguimos. Dime cuándo y lo organizo.
-
----
-
-## Día 7 · Seguimiento L3b
-
-**Canal:** Chat in-app (Aurya) + push.
-
-**Push:**
-> {Nombre}, ¿pudiste hablar con Alex? El equipo de {Centro} te necesita esta semana.
-
-**Mensaje Aurya (chat in-app):**
-> {Nombre}, ¿cómo va? Si la semana pasada no pudiste hacer la llamada con Alex, dime cuándo puedes y lo buscamos. También puedes contarme aquí qué está pasando si lo prefieres.
-
----
-
-## Día 14 · Aviso crítico
-
-**Canal:** WhatsApp Lorena.
-
-**Mensaje WhatsApp Lorena:**
-> {Nombre}, llevamos dos semanas en rescate y no hemos podido retomar el ritmo ni hablar con Alex. Entiendo que puede haber circunstancias fuera de tu control, pero necesito saber si quieres seguir con el rol. ¿Me escribes antes del {fecha}?
-
----
-
-## Día 21 · Cierre L3b → L3c / L0b
-
-**Sin retomar → L3c (rescate fallido) → L0b**.
-
-**Canal:** WhatsApp Lorena.
-
-**Mensaje WhatsApp Lorena:**
-> {Nombre}, cerramos este ciclo aquí. Como no hemos podido retomar el warmup grupal en {Centro}, Alex va a revisar el rol en la próxima revisión trimestral. El rol puede volver a ser tuyo si quieres retomarlo — solo escríbeme. Un saludo.
-
-> 🔴 **Acción:** Marcar L3c → L0b. Sin cadencia activa. Espera revisión trimestral.
-
----
-
----
-
-# Resumen visual de mensajes por fase
-
-```
-L0a · Recién nominado (21 días)
-  Día 1   WhatsApp Lorena    Bienvenida + primer paso
-  Día 3   Push               Activación (si push activo)
-  Día 7   Chat/Push/WA       Aviso 2 según canal disponible
-  Día 14  Chat/Push/WA       Aviso 3 · tono más directo
-  Día 21  Chat + WA          Cierre → L0b
-
-L1 · Activo (semanal)
-  Cada sem   Chat Aurya      Seguimiento semanal en diana
-  1 sem baja Push + Chat     Señal de caída reactiva
-  2 sem baja Chat + WA       Aviso · diagnóstico
-  8 sem OK   Push + WA + App Celebración → L2
-
-L2 · Consolidado (quincenal)
-  Cada 2 sem Chat Aurya      Reconocimiento
-  Mensual    Email           Resumen de resultados
-  1 sem baja Push + Chat     Señal de caída reactiva
-
-L3a · Rescate suave (14 días)
-  Día 0   Chat + WA          Diagnóstico · ¿qué pasó?
-  Día 7   Chat               Seguimiento
-  Día 14  Push + WA          Límite → L3b si no retoma
-
-L3b · Rescate completo (21 días)
-  Día 0   Push + WA          Directo · oferta videollamada
-  Día 7   Push + Chat        Seguimiento
-  Día 14  WA                 Aviso crítico
-  Día 21  WA                 Cierre → L3c / L0b
-```
-
----
-
-# Pendiente de definir
-
-- [ ] Mensajes distintos si leyó / no leyó el anterior (cuando read tracking esté disponible)
-- [ ] Wording de videollamada L3b · capacidad operativa de Alex
-- [ ] In-app especial en transición L1→L2 (modal / badge / animación) · con Inhar
-- [ ] Criterio operativo para re-nominación trimestral desde L3c · con Alex
+- [ ] Definición correcta de sub-estados L3 (opción A vs B)
+- [ ] Mensajes de rescate L3a y L3b (se escriben tras resolver lo anterior)
+- [ ] Videollamada en L3b — Lorena propone por WhatsApp (¿días disponibles?)
+- [ ] In-app especial en transición L1→L2 (modal/badge/animación) · con Inhar
+- [ ] Denominador de asistencia (% equipo presente como criterio)
+- [ ] Frecuencia diana warmups/semana (¿varía por centro?)
 - [ ] Track A solo vs Track A + Track B en L2 (reconocimiento base vs. gamificación)
-- [ ] Implementación del cron semanal que evalúa transiciones · con Inhar
+- [ ] Criterio operativo para L2 activo · qué señales mira Alex
