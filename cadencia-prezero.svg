@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 2600" width="1800" height="2600" font-family="Inter, Arial, sans-serif">
+  <!-- Background -->
+  <rect width="1800" height="2600" fill="#ffffff"/>
+
+  <!-- Arrow marker definitions -->
+  <defs>
+    <marker id="arrowGray" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6B7280"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#3B82F6"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#10B981"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#EF4444"/>
+    </marker>
+    <marker id="arrowAmber" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#F59E0B"/>
+    </marker>
+  </defs>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- HEADER -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <rect x="40" y="20" width="1720" height="80" rx="12" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+  <text x="900" y="58" text-anchor="middle" font-size="30" font-weight="700" fill="#0F172A">PreZero · Cadencia Líderes</text>
+  <text x="900" y="82" text-anchor="middle" font-size="15" fill="#6B7280">Versión 4</text>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- PHASE OVERVIEW ROW -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- L0 box -->
+  <rect x="80" y="110" width="280" height="60" rx="8" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
+  <text x="220" y="136" text-anchor="middle" font-size="15" font-weight="700" fill="#92400E">L0 · No activo</text>
+  <text x="220" y="156" text-anchor="middle" font-size="12" fill="#B45309">Onboarding 21 días</text>
+
+  <!-- Arrow L0 → L1 -->
+  <line x1="364" y1="140" x2="440" y2="140" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowGray)"/>
+
+  <!-- L1 box -->
+  <rect x="444" y="110" width="280" height="60" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="2"/>
+  <text x="584" y="136" text-anchor="middle" font-size="15" font-weight="700" fill="#1E40AF">L1 · Activo</text>
+  <text x="584" y="156" text-anchor="middle" font-size="12" fill="#1D4ED8">Seguimiento semanal</text>
+
+  <!-- Arrow L1 → L2 -->
+  <line x1="728" y1="140" x2="804" y2="140" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowGray)"/>
+
+  <!-- L2 box -->
+  <rect x="808" y="110" width="280" height="60" rx="8" fill="#D1FAE5" stroke="#10B981" stroke-width="2"/>
+  <text x="948" y="136" text-anchor="middle" font-size="15" font-weight="700" fill="#065F46">L2 · En racha</text>
+  <text x="948" y="156" text-anchor="middle" font-size="12" fill="#047857">Rutina estable</text>
+
+  <!-- Arrow L1 → L3 (down) -->
+  <line x1="584" y1="174" x2="584" y2="200" stroke="#EF4444" stroke-width="2" marker-end="url(#arrowRed)"/>
+
+  <!-- L3 box -->
+  <rect x="444" y="204" width="280" height="60" rx="8" fill="#FEE2E2" stroke="#EF4444" stroke-width="2"/>
+  <text x="584" y="230" text-anchor="middle" font-size="15" font-weight="700" fill="#991B1B">L3 · En riesgo</text>
+  <text x="584" y="250" text-anchor="middle" font-size="12" fill="#B91C1C">Intervención</text>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- CHANNELS LEGEND -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <rect x="40" y="278" width="1720" height="44" rx="8" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+  <circle cx="200" cy="300" r="8" fill="#8B5CF6"/>
+  <text x="216" y="305" font-size="13" fill="#374151">Chat in-app (Aurya)</text>
+  <circle cx="440" cy="300" r="8" fill="#3B82F6"/>
+  <text x="456" y="305" font-size="13" fill="#374151">Push</text>
+  <circle cx="580" cy="300" r="8" fill="#10B981"/>
+  <text x="596" y="305" font-size="13" fill="#374151">WhatsApp (Lorena)</text>
+  <text x="900" y="305" text-anchor="middle" font-size="12" fill="#9CA3AF">· Canales disponibles por nivel de cadencia ·</text>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- COLUMN DIVIDERS -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <line x1="600" y1="335" x2="600" y2="1400" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="6,4"/>
+  <line x1="1180" y1="335" x2="1180" y2="1400" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="6,4"/>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- L0a SECTION — Left column x=40–580 -->
+  <!-- ═══════════════════════════════════════════════ -->
+
+  <!-- L0a Header -->
+  <rect x="40" y="335" width="540" height="66" rx="8" fill="#F59E0B" />
+  <text x="310" y="362" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">L0a · No activo · Onboarding 21 días</text>
+  <text x="310" y="384" text-anchor="middle" font-size="11.5" fill="#FEF3C7">Entra: nominación por Alex  |  Sale: primer warmup grupal</text>
+
+  <!-- Stage 1 -->
+  <rect x="40" y="430" width="540" height="80" rx="8" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.5"/>
+  <text x="60" y="452" font-size="13" font-weight="700" fill="#92400E">Día 1 · WhatsApp Lorena</text>
+  <text x="60" y="470" font-size="12" fill="#78350F">Bienvenida · presentación · ¿cuándo el primer warmup?</text>
+  <rect x="420" y="440" width="140" height="22" rx="4" fill="#10B981"/>
+  <text x="490" y="455" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">MANUAL</text>
+
+  <!-- Arrow -->
+  <line x1="310" y1="512" x2="310" y2="536" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+
+  <!-- Stage 2 -->
+  <rect x="40" y="538" width="540" height="80" rx="8" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.5"/>
+  <text x="60" y="560" font-size="13" font-weight="700" fill="#92400E">Día 3 · Push</text>
+  <text x="60" y="578" font-size="12" fill="#78350F">¿Hoy puede ser el primer warmup? 💪</text>
+  <rect x="370" y="548" width="190" height="22" rx="4" fill="#6B7280"/>
+  <text x="465" y="563" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">NO BLOQUEANTE</text>
+
+  <!-- Arrow -->
+  <line x1="310" y1="620" x2="310" y2="644" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+
+  <!-- Stage 3 -->
+  <rect x="40" y="646" width="540" height="80" rx="8" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.5"/>
+  <text x="60" y="668" font-size="13" font-weight="700" fill="#92400E">Día 7 · Chat / Push / WhatsApp</text>
+  <text x="60" y="686" font-size="12" fill="#78350F">6 variantes: leído/no leído × 3 canales</text>
+  <rect x="330" y="656" width="230" height="22" rx="4" fill="#8B5CF6"/>
+  <text x="445" y="671" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">AUTO O MANUAL</text>
+
+  <!-- Arrow -->
+  <line x1="310" y1="728" x2="310" y2="752" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+
+  <!-- Stage 4 -->
+  <rect x="40" y="754" width="540" height="80" rx="8" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.5"/>
+  <text x="60" y="776" font-size="13" font-weight="700" fill="#92400E">Día 14 · Chat / Push / WhatsApp</text>
+  <text x="60" y="794" font-size="12" fill="#78350F">Tono más directo · ¿qué te está frenando?</text>
+  <rect x="330" y="764" width="230" height="22" rx="4" fill="#8B5CF6"/>
+  <text x="445" y="779" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">AUTO O MANUAL</text>
+
+  <!-- Arrow -->
+  <line x1="310" y1="836" x2="310" y2="860" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+
+  <!-- Stage 5 -->
+  <rect x="40" y="862" width="540" height="80" rx="8" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.5"/>
+  <text x="60" y="884" font-size="13" font-weight="700" fill="#92400E">Día 20 · Cierre</text>
+  <text x="60" y="902" font-size="12" fill="#78350F">Lo dejamos aquí · el rol sigue siendo tuyo</text>
+  <rect x="420" y="872" width="140" height="22" rx="4" fill="#10B981"/>
+  <text x="490" y="887" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">MANUAL</text>
+
+  <!-- Arrow to L0b -->
+  <line x1="310" y1="944" x2="310" y2="966" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+
+  <!-- L0b box -->
+  <rect x="80" y="968" width="460" height="50" rx="8" fill="#F3F4F6" stroke="#9CA3AF" stroke-width="1.5"/>
+  <text x="310" y="991" text-anchor="middle" font-size="13" font-weight="600" fill="#374151">L0b · Intentado · Revisión trimestral</text>
+  <text x="310" y="1008" text-anchor="middle" font-size="11" fill="#6B7280">Sin primer warmup → archivo temporal</text>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- L1 SECTION — Center column x=620–1160 -->
+  <!-- ═══════════════════════════════════════════════ -->
+
+  <!-- L1 Header -->
+  <rect x="620" y="335" width="540" height="66" rx="8" fill="#3B82F6"/>
+  <text x="890" y="362" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">L1 · Activo · Seguimiento semanal</text>
+  <text x="890" y="384" text-anchor="middle" font-size="11" fill="#DBEAFE">Entra: primer warmup  |  Sale a L2: 8 sem en diana  |  Sale a L3: 3 sem bajo umbral</text>
+
+  <!-- Track A Sub-header -->
+  <rect x="620" y="422" width="540" height="26" rx="6" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+  <text x="890" y="440" text-anchor="middle" font-size="13" font-weight="700" fill="#1E40AF">Track A · One-time (primeros 7 días)</text>
+
+  <!-- Track A boxes -->
+  <rect x="620" y="458" width="540" height="62" rx="8" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.5"/>
+  <text x="640" y="478" font-size="12.5" font-weight="700" fill="#1E40AF">Día 1 · Aurya · Celebración primer warmup</text>
+  <text x="640" y="496" font-size="11.5" fill="#1D4ED8">Mensaje automático de bienvenida activa</text>
+  <rect x="1050" y="465" width="90" height="20" rx="4" fill="#6B7280"/>
+  <text x="1095" y="479" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">AUTO</text>
+
+  <rect x="620" y="530" width="540" height="62" rx="8" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.5"/>
+  <text x="640" y="550" font-size="12.5" font-weight="700" fill="#1E40AF">Día 3 · Push · Check-in</text>
+  <text x="640" y="568" font-size="11.5" fill="#1D4ED8">¿Cómo fue el primer warmup?</text>
+  <rect x="960" y="538" width="180" height="20" rx="4" fill="#6B7280"/>
+  <text x="1050" y="552" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">NO BLOQUEANTE</text>
+
+  <rect x="620" y="602" width="540" height="62" rx="8" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.5"/>
+  <text x="640" y="622" font-size="12.5" font-weight="700" fill="#1E40AF">Día 7 · Aurya · Primera revisión</text>
+  <text x="640" y="640" font-size="11.5" fill="#1D4ED8">Diagnóstico: diana / no diana · plan de acción</text>
+  <rect x="960" y="610" width="180" height="20" rx="4" fill="#8B5CF6"/>
+  <text x="1050" y="624" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">AUTO O MANUAL</text>
+
+  <!-- Track B Sub-header -->
+  <rect x="620" y="686" width="540" height="26" rx="6" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+  <text x="890" y="704" text-anchor="middle" font-size="13" font-weight="700" fill="#1E40AF">Track B · Recurrente semanal</text>
+
+  <!-- Track B Logic boxes -->
+  <rect x="620" y="722" width="540" height="52" rx="8" fill="#F0FDF4" stroke="#6EE7B7" stroke-width="1.5"/>
+  <text x="640" y="745" font-size="12.5" font-weight="700" fill="#065F46">≥ Diana → WAITING (sin mensaje)</text>
+  <text x="640" y="763" font-size="11" fill="#047857">No se envía ningún mensaje · espera siguiente semana</text>
+
+  <rect x="620" y="784" width="540" height="52" rx="8" fill="#FFF7ED" stroke="#FCD34D" stroke-width="1.5"/>
+  <text x="640" y="807" font-size="12.5" font-weight="700" fill="#92400E">&lt; Diana sem 1 → Push día cierre + Aurya día+3</text>
+  <text x="640" y="825" font-size="11" fill="#B45309">Empujón suave · primera alerta</text>
+
+  <rect x="620" y="846" width="540" height="52" rx="8" fill="#FFF7ED" stroke="#F97316" stroke-width="1.5"/>
+  <text x="640" y="869" font-size="12.5" font-weight="700" fill="#92400E">&lt; Diana 2 sem → Aurya día cierre + WA Lorena día+2</text>
+  <text x="640" y="887" font-size="11" fill="#B45309">Alerta escalada · intervención de Lorena</text>
+
+  <rect x="620" y="908" width="540" height="52" rx="8" fill="#FEE2E2" stroke="#EF4444" stroke-width="1.5"/>
+  <text x="640" y="931" font-size="12.5" font-weight="700" fill="#991B1B">&lt; Diana 3 sem → ⚠️ Escala a L3</text>
+  <text x="640" y="949" font-size="11" fill="#B91C1C">Activación protocolo de riesgo</text>
+
+  <!-- Trigger box -->
+  <rect x="620" y="978" width="540" height="54" rx="8" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
+  <text x="640" y="1000" font-size="12.5" font-weight="700" fill="#92400E">🔥 Trigger "En racha" — tier Mantener cae a 5/7</text>
+  <text x="640" y="1018" font-size="11" fill="#78350F">Push inmediato + Aurya día+3 · recuperación rápida</text>
+
+  <!-- Transition to L2 -->
+  <line x1="890" y1="1034" x2="890" y2="1052" stroke="#10B981" stroke-width="2" marker-end="url(#arrowGreen)"/>
+  <rect x="660" y="1054" width="460" height="54" rx="8" fill="#D1FAE5" stroke="#10B981" stroke-width="2.5"/>
+  <text x="890" y="1077" text-anchor="middle" font-size="13" font-weight="700" fill="#065F46">🏆 8 sem en diana → Sube a L2</text>
+  <text x="890" y="1095" text-anchor="middle" font-size="11" fill="#047857">Push celebración + WA Lorena + in-app especial</text>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- L2 SECTION — Right column x=1200–1760 -->
+  <!-- ═══════════════════════════════════════════════ -->
+
+  <!-- L2 Header -->
+  <rect x="1200" y="335" width="560" height="66" rx="8" fill="#10B981"/>
+  <text x="1480" y="362" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">L2 · En racha · Rutina estable</text>
+  <text x="1480" y="384" text-anchor="middle" font-size="11" fill="#D1FAE5">Entra: 8 sem en diana  |  Sale a L1: 3 sem perdiendo diana</text>
+
+  <!-- L2 Sub-estados -->
+  <rect x="1200" y="422" width="560" height="28" rx="6" fill="#ECFDF5" stroke="#6EE7B7" stroke-width="1"/>
+  <text x="1480" y="441" text-anchor="middle" font-size="12.5" font-weight="600" fill="#065F46">Sub-estados: L2 base · L2 activo (movilizador, Alex activa)</text>
+
+  <!-- L2 Seguimiento semanal silencioso -->
+  <rect x="1200" y="470" width="560" height="28" rx="6" fill="#ECFDF5" stroke="#A7F3D0" stroke-width="1"/>
+  <text x="1480" y="489" text-anchor="middle" font-size="13" font-weight="700" fill="#065F46">Seguimiento semanal silencioso</text>
+
+  <rect x="1200" y="508" width="560" height="52" rx="8" fill="#F0FDF4" stroke="#6EE7B7" stroke-width="1.5"/>
+  <text x="1220" y="531" font-size="12.5" font-weight="700" fill="#065F46">≥ Diana → WAITING</text>
+  <text x="1220" y="549" font-size="11" fill="#047857">Sin mensajes · seguimiento silencioso</text>
+
+  <rect x="1200" y="570" width="560" height="52" rx="8" fill="#FFF7ED" stroke="#FCD34D" stroke-width="1.5"/>
+  <text x="1220" y="593" font-size="12.5" font-weight="700" fill="#92400E">&lt; Diana sem 1 → Aurya check-in suave día cierre</text>
+  <text x="1220" y="611" font-size="11" fill="#B45309">+ WA Lorena día+3 · tono de apoyo</text>
+
+  <rect x="1200" y="632" width="560" height="52" rx="8" fill="#FFF7ED" stroke="#F97316" stroke-width="1.5"/>
+  <text x="1220" y="655" font-size="12.5" font-weight="700" fill="#92400E">&lt; Diana 2 sem → Aurya+Push día cierre</text>
+  <text x="1220" y="673" font-size="11" fill="#B45309">+ WA Lorena día+2 · alerta moderada</text>
+
+  <rect x="1200" y="694" width="560" height="52" rx="8" fill="#FEE2E2" stroke="#EF4444" stroke-width="1.5"/>
+  <text x="1220" y="717" font-size="12.5" font-weight="700" fill="#991B1B">&lt; Diana 3 sem → Vuelve a L1</text>
+  <text x="1220" y="735" font-size="11" fill="#B91C1C">Descenso de nivel · reinicio Track A en L1</text>
+
+  <!-- L2 Reconocimiento quincenal -->
+  <rect x="1200" y="766" width="560" height="28" rx="6" fill="#ECFDF5" stroke="#A7F3D0" stroke-width="1"/>
+  <text x="1480" y="785" text-anchor="middle" font-size="13" font-weight="700" fill="#065F46">Reconocimiento quincenal</text>
+
+  <rect x="1200" y="804" width="560" height="52" rx="8" fill="#ECFDF5" stroke="#34D399" stroke-width="1.5"/>
+  <text x="1220" y="827" font-size="12.5" font-weight="700" fill="#065F46">Cada 2 sem en diana → Aurya · reconocimiento</text>
+  <text x="1220" y="845" font-size="11" fill="#047857">Variante base / activo según sub-estado</text>
+
+  <!-- L2 Email mensual -->
+  <rect x="1200" y="876" width="560" height="28" rx="6" fill="#ECFDF5" stroke="#A7F3D0" stroke-width="1"/>
+  <text x="1480" y="895" text-anchor="middle" font-size="13" font-weight="700" fill="#065F46">Email mensual</text>
+
+  <rect x="1200" y="914" width="560" height="52" rx="8" fill="#ECFDF5" stroke="#34D399" stroke-width="1.5"/>
+  <text x="1220" y="937" font-size="12.5" font-weight="700" fill="#065F46">Primer lunes/mes → Email automático con métricas</text>
+  <text x="1220" y="955" font-size="11" fill="#047857">Resumen mensual · participación · progresión</text>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- L3 SECTION — Full width y=1140–1660 -->
+  <!-- ═══════════════════════════════════════════════ -->
+
+  <!-- L3 Full-width Header -->
+  <rect x="40" y="1140" width="1720" height="66" rx="8" fill="#EF4444"/>
+  <text x="900" y="1167" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">L3 · En riesgo · Intervención</text>
+  <text x="900" y="1190" text-anchor="middle" font-size="11.5" fill="#FEE2E2">Entra: 3 sem bajo umbral o 2 sem sin reporte  |  Sale: retoma warmup → L1  |  Sin retoma → L3c → L0b</text>
+
+  <!-- L3a Column (left half) -->
+  <rect x="40" y="1228" width="840" height="36" rx="6" fill="#FEE2E2" stroke="#FCA5A5" stroke-width="1"/>
+  <text x="460" y="1252" text-anchor="middle" font-size="14" font-weight="700" fill="#991B1B">L3a · Intervención suave · 14 días</text>
+
+  <rect x="40" y="1274" width="840" height="28" rx="6" fill="#FFF5F5" stroke="#FCA5A5" stroke-width="1"/>
+  <text x="460" y="1293" text-anchor="middle" font-size="12" fill="#B91C1C">Criterio: tiene rehab plan activo con Alex</text>
+
+  <rect x="40" y="1312" width="840" height="68" rx="8" fill="#FFF5F5" stroke="#FCA5A5" stroke-width="1.5"/>
+  <text x="60" y="1336" font-size="13" font-weight="700" fill="#991B1B">Día 0 · Chat Aurya + WhatsApp Lorena · Diagnóstico</text>
+  <text x="60" y="1356" font-size="12" fill="#B91C1C">¿Qué está pasando? · identificación de bloqueos</text>
+  <rect x="740" y="1320" width="120" height="20" rx="4" fill="#10B981"/>
+  <text x="800" y="1334" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">MANUAL</text>
+
+  <line x1="460" y1="1382" x2="460" y2="1400" stroke="#EF4444" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+
+  <rect x="40" y="1402" width="840" height="68" rx="8" fill="#FFF5F5" stroke="#FCA5A5" stroke-width="1.5"/>
+  <text x="60" y="1426" font-size="13" font-weight="700" fill="#991B1B">Día 7 · Chat Aurya · Seguimiento</text>
+  <text x="60" y="1446" font-size="12" fill="#B91C1C">¿Hubo avance? · ajuste de plan con Alex</text>
+  <rect x="740" y="1410" width="120" height="20" rx="4" fill="#8B5CF6"/>
+  <text x="800" y="1424" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">AUTO</text>
+
+  <line x1="460" y1="1472" x2="460" y2="1490" stroke="#EF4444" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+
+  <rect x="40" y="1492" width="840" height="68" rx="8" fill="#FFF5F5" stroke="#FCA5A5" stroke-width="1.5"/>
+  <text x="60" y="1516" font-size="13" font-weight="700" fill="#991B1B">Día 14 · Push + WhatsApp Lorena · Límite</text>
+  <text x="60" y="1536" font-size="12" fill="#B91C1C">Última oportunidad antes de escalar a L3b</text>
+  <rect x="740" y="1500" width="120" height="20" rx="4" fill="#10B981"/>
+  <text x="800" y="1514" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">MANUAL</text>
+
+  <!-- L3a → L3b arrow -->
+  <line x1="460" y1="1562" x2="460" y2="1580" stroke="#EF4444" stroke-width="1.5"/>
+  <rect x="200" y="1582" width="520" height="32" rx="6" fill="#FEE2E2" stroke="#EF4444" stroke-width="1.5"/>
+  <text x="460" y="1603" text-anchor="middle" font-size="12" font-weight="600" fill="#991B1B">Sin retoma → escala a L3b ↓</text>
+
+  <!-- L3b Column (right half) -->
+  <rect x="920" y="1228" width="840" height="36" rx="6" fill="#FEE2E2" stroke="#FCA5A5" stroke-width="1"/>
+  <text x="1340" y="1252" text-anchor="middle" font-size="14" font-weight="700" fill="#991B1B">L3b · Intervención directa · 21 días</text>
+
+  <rect x="920" y="1274" width="840" height="28" rx="6" fill="#FFF5F5" stroke="#FCA5A5" stroke-width="1"/>
+  <text x="1340" y="1293" text-anchor="middle" font-size="12" fill="#B91C1C">Criterio: sin rehab plan / escalada desde L3a</text>
+
+  <rect x="920" y="1312" width="840" height="68" rx="8" fill="#FFF5F5" stroke="#FCA5A5" stroke-width="1.5"/>
+  <text x="940" y="1336" font-size="13" font-weight="700" fill="#991B1B">Día 0 · Push + WhatsApp Lorena · Contacto directo</text>
+  <text x="940" y="1356" font-size="12" fill="#B91C1C">Mensaje directo + propuesta de videollamada urgente</text>
+  <rect x="1620" y="1320" width="120" height="20" rx="4" fill="#10B981"/>
+  <text x="1680" y="1334" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">MANUAL</text>
+
+  <line x1="1340" y1="1382" x2="1340" y2="1400" stroke="#EF4444" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+
+  <rect x="920" y="1402" width="840" height="68" rx="8" fill="#FFF5F5" stroke="#FCA5A5" stroke-width="1.5"/>
+  <text x="940" y="1426" font-size="13" font-weight="700" fill="#991B1B">Día 7 · Push + Aurya · Seguimiento videollamada</text>
+  <text x="940" y="1446" font-size="12" fill="#B91C1C">¿Se realizó la videollamada? · resultado · próximos pasos</text>
+  <rect x="1620" y="1410" width="120" height="20" rx="4" fill="#8B5CF6"/>
+  <text x="1680" y="1424" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">AUTO</text>
+
+  <line x1="1340" y1="1472" x2="1340" y2="1490" stroke="#EF4444" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+
+  <rect x="920" y="1492" width="840" height="68" rx="8" fill="#FFF5F5" stroke="#FCA5A5" stroke-width="1.5"/>
+  <text x="940" y="1516" font-size="13" font-weight="700" fill="#991B1B">Día 14 · WhatsApp Lorena · Aviso crítico</text>
+  <text x="940" y="1536" font-size="12" fill="#B91C1C">Situación crítica · decisión de continuidad del rol</text>
+  <rect x="1620" y="1500" width="120" height="20" rx="4" fill="#10B981"/>
+  <text x="1680" y="1514" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">MANUAL</text>
+
+  <line x1="1340" y1="1562" x2="1340" y2="1580" stroke="#EF4444" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+
+  <rect x="920" y="1582" width="840" height="68" rx="8" fill="#FFF5F5" stroke="#FCA5A5" stroke-width="1.5"/>
+  <text x="940" y="1606" font-size="13" font-weight="700" fill="#991B1B">Día 21 · WhatsApp Lorena · Cierre</text>
+  <text x="940" y="1626" font-size="12" fill="#B91C1C">Comunicación final · archivo o transición a L0b</text>
+  <rect x="1620" y="1590" width="120" height="20" rx="4" fill="#10B981"/>
+  <text x="1680" y="1604" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">MANUAL</text>
+
+  <!-- L3b → L3c arrow -->
+  <line x1="1340" y1="1652" x2="1340" y2="1670" stroke="#EF4444" stroke-width="1.5"/>
+  <rect x="1080" y="1672" width="520" height="32" rx="6" fill="#FEE2E2" stroke="#EF4444" stroke-width="1.5"/>
+  <text x="1340" y="1693" text-anchor="middle" font-size="12" font-weight="600" fill="#991B1B">Sin retoma → L3c → L0b ↓</text>
+
+  <!-- L3c centered box -->
+  <line x1="460" y1="1616" x2="460" y2="1720" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <line x1="1340" y1="1706" x2="900" y2="1740" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <line x1="460" y1="1720" x2="900" y2="1740" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="5,3"/>
+
+  <rect x="560" y="1742" width="680" height="60" rx="8" fill="#F3F4F6" stroke="#9CA3AF" stroke-width="2"/>
+  <text x="900" y="1769" text-anchor="middle" font-size="14" font-weight="700" fill="#374151">L3c · Sin retoma → L0b</text>
+  <text x="900" y="1789" text-anchor="middle" font-size="12" fill="#6B7280">Revisión trimestral Alex · posible reactivación futura</text>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- TRANSITION ARROWS between main columns -->
+  <!-- ═══════════════════════════════════════════════ -->
+
+  <!-- L0 column top → indicates flow to L1 -->
+  <line x1="584" y1="401" x2="620" y2="401" stroke="#6B7280" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrowGray)"/>
+
+  <!-- L1 top → L2 top -->
+  <line x1="1164" y1="401" x2="1200" y2="401" stroke="#6B7280" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrowGray)"/>
+
+  <!-- L1 → L3 (vertical arrow from L1 section) -->
+  <line x1="890" y1="960" x2="890" y2="1140" stroke="#EF4444" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrowRed)"/>
+  <text x="906" y="1060" font-size="11" fill="#EF4444" font-weight="600">3 sem bajo umbral</text>
+
+  <!-- L3 → L1 recovery arrow (left side) -->
+  <line x1="42" y1="1400" x2="42" y2="1050" stroke="#3B82F6" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowBlue)"/>
+  <text transform="rotate(-90, 30, 1200)" x="30" y="1200" text-anchor="middle" font-size="11" fill="#3B82F6" font-weight="600">Retoma warmup → L1</text>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- PENDING SECTION -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <rect x="40" y="1840" width="1720" height="64" rx="8" fill="#F9FAFB" stroke="#D1D5DB" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="900" y="1864" text-anchor="middle" font-size="13" font-weight="700" fill="#6B7280">⏳ Pendiente</text>
+  <text x="900" y="1886" text-anchor="middle" font-size="12" fill="#9CA3AF">in-app L1→L2 (Inhar) · denominador asistencia · diana por tier · criterio L2 activo · read tracking</text>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- FOOTER -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <rect x="40" y="1926" width="1720" height="44" rx="8" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="900" y="1953" text-anchor="middle" font-size="12" fill="#9CA3AF">PreZero · Sistema de Cadencia Líderes v4 · Generado automáticamente</text>
+
+</svg>
