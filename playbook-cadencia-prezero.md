@@ -1,5 +1,5 @@
 # Playbook de cadencia · PreZero Líderes
-> Versión 2 · documento vivo · pendiente cierre L3
+> Versión 3 · completo
 
 ---
 
@@ -452,29 +452,190 @@ Misma lógica que L1 Track B. L2 tiene doble pared antes de L3:
 
 # L3 · En riesgo
 
-> ⚠️ **Definición de sub-estados pendiente de aclaración.**
->
-> Hay una inconsistencia entre las fichas de diseño y el documento de arquitectura. Antes de escribir los mensajes de L3, necesito confirmar cuál es la definición correcta de L3a, L3b y L3c.
->
-> **Opción A (imágenes/fichas):**
-> - L3a = rescate suave · líder con rehab plan activo al entrar en L3
-> - L3b = rescate completo · líder sin rehab plan al entrar
-> - L3c = rescate fallido · 21d sin retomar
->
-> **Opción B (documento de arquitectura):**
-> - L3a = PLENO (warmups ✅ + reporta ✅ + plan prevention)
-> - L3b = PARCIAL (warmups ✅ + falta una pata)
-> - L3c = CLÍNICO (warmups ✅ + rehab con Alex)
+**Definición:** Los warmups caen bajo umbral del tier durante 3 semanas consecutivas, o el líder no reporta 2 semanas seguidas.
+**Salida a L1:** Retoma warmups dentro de la ventana de rescate.
+**Salida a L0b:** Rescate fallido → L3c → archivar.
+
+**Sub-estados — se asignan al entrar y no cambian durante el rescate:**
+
+| Sub-estado | Criterio al entrar | Ventana | Tono |
+|---|---|---|---|
+| L3a · rescate suave | Tiene rehab plan activo con Alex | 14 días | Empático · diagnóstico |
+| L3b · rescate completo | Sin rehab plan | 21 días | Directo · videollamada |
+| L3c · rescate fallido | Sin retomar tras ventana | — | Cierre → L0b |
+
+**Por qué importa el rehab plan:**
+- L3a: Alex ya tiene relación clínica con el líder → el rescate puede apoyarse en esa confianza, tono más suave.
+- L3b: Sin conexión clínica → intervención más directa, se ofrece videollamada con Alex desde el día 0.
+
+---
+
+## Resolver L3
+
+```
+input:
+  l3EntryAt              ← fecha de entrada a L3
+  hasRehabPlan           ← determina L3a vs L3b al entrar
+  leader.cadence.l3.manualActions[]
+  leader.chatInApp.lastAuryaMessageAt
+  leader.warmupReportedAt ← si reporta warmup → exit a L1
+
+output:
+  { kind: 'pending' | 'waiting' | 'complete', stage, channel, message }
+```
+
+---
+
+## L3a · Rescate suave (14 días)
+
+### Día 0 · Entrada · Diagnóstico
+
+| | |
+|--|--|
+| **Cuándo** | Inmediatamente al entrar en L3a |
+| **Canal** | Chat in-app (Aurya) + WhatsApp Lorena |
+| **Completa** | Automático (chat) o manual (WA) |
+
+**Mensaje Aurya (chat in-app):**
+> {Nombre}, he notado que las últimas semanas el warmup grupal ha bajado en {Centro}. No te escribo para presionarte — sé que hay semanas complicadas. ¿Qué está pasando? Cuéntame y lo vemos juntos.
+
+**Mensaje WhatsApp Lorena:**
+> Hola {Nombre}, soy Lorena. Alex me ha dicho que las últimas semanas han sido complicadas en {Centro} con el warmup. ¿Tienes un momento esta semana para contarme qué está pasando? Quiero entenderlo antes de hacer nada.
+
+---
+
+### Día 7 · Seguimiento
+
+| | |
+|--|--|
+| **Cuándo** | Día 7 desde entrada a L3a |
+| **Canal** | Chat in-app (Aurya) |
+| **Completa** | Automático o manual |
+
+**Mensaje Aurya:**
+> {Nombre}, ¿cómo va la semana? ¿Has podido organizar algún warmup grupal en {Centro}? Si hay algo que esté bloqueando al equipo — horarios, participación, lo que sea — cuéntame. A veces hay que ajustar el formato y ya está.
+
+---
+
+### Día 14 · Límite L3a → escalada a L3b si no retoma
+
+| | |
+|--|--|
+| **Cuándo** | Día 14 desde entrada a L3a |
+| **Canal** | Push + WhatsApp Lorena |
+| **Completa** | Manual |
+
+**Push:**
+> {Nombre}, llevamos dos semanas sin warmup grupal en {Centro}. ¿Hablamos esta semana?
+
+**Mensaje WhatsApp Lorena:**
+> Hola {Nombre}, han pasado dos semanas y todavía no hemos podido retomar el ritmo en {Centro}. Quiero que hablemos antes de que esto se complique más. ¿Tienes un hueco esta semana — aunque sea 10 minutos — para una llamada con Alex? Lo organizo yo. Solo dime cuándo.
+
+> 🔴 **Acción:** Si no retoma warmup → marcar L3b. El sub-estado cambia pero la ventana continúa desde el día 0.
+
+---
+
+## L3b · Rescate completo (21 días)
+
+**Entrada desde:** L1/L2 sin rehab plan, **o** escalada desde L3a sin retomar en 14d.
+
+### Día 0 · Entrada · Directo + videollamada
+
+| | |
+|--|--|
+| **Cuándo** | Inmediatamente al entrar en L3b |
+| **Canal** | Push + WhatsApp Lorena |
+| **Completa** | Manual |
+
+**Push:**
+> {Nombre}, el warmup en {Centro} lleva semanas parado. Lorena te escribe hoy.
+
+**Mensaje WhatsApp Lorena:**
+> Hola {Nombre}, soy Lorena. Voy al grano: el warmup grupal en {Centro} lleva varias semanas por debajo del mínimo y necesitamos resolverlo. ¿Puedes hacer una videollamada con Alex esta semana? No es para revisar lo que pasó — es para ver cómo seguimos y qué necesitas. Dime cuándo y lo organizo yo.
+
+---
+
+### Día 7 · Seguimiento videollamada
+
+| | |
+|--|--|
+| **Cuándo** | Día 7 desde entrada a L3b |
+| **Canal** | Push + Chat in-app (Aurya) |
+| **Completa** | Manual o automático |
+
+**Push:**
+> {Nombre}, ¿pudiste hablar con Alex? El equipo de {Centro} te necesita esta semana.
+
+**Mensaje Aurya:**
+> {Nombre}, ¿cómo va? Si la semana pasada no pudiste hacer la videollamada con Alex, dime cuándo puedes y lo buscamos. También puedes contarme aquí qué está pasando si lo prefieres.
+
+---
+
+### Día 14 · Aviso crítico
+
+| | |
+|--|--|
+| **Cuándo** | Día 14 desde entrada a L3b |
+| **Canal** | WhatsApp Lorena |
+| **Completa** | Manual |
+
+**Mensaje WhatsApp Lorena:**
+> Hola {Nombre}, llevamos dos semanas en rescate y no hemos podido retomar el ritmo ni hablar con Alex. Entiendo que puede haber cosas fuera de tu control, pero necesito saber si quieres seguir con el rol. ¿Me escribes antes del {fecha límite}? Si no tengo respuesta, Alex revisará el rol en la próxima revisión.
+
+---
+
+### Día 21 · Cierre → L3c · L0b
+
+| | |
+|--|--|
+| **Cuándo** | Día 21 desde entrada a L3b |
+| **Canal** | WhatsApp Lorena |
+| **Completa** | Manual · último paso |
+
+**Mensaje WhatsApp Lorena:**
+> Hola {Nombre}, cerramos este ciclo aquí. Como no hemos podido retomar el warmup grupal en {Centro}, Alex va a revisar el rol en la próxima revisión trimestral. El rol puede volver a ser tuyo si quieres retomarlo — solo escríbeme y lo reactivamos. Un saludo.
+
+> 🔴 **Acción:** Marcar L3c → L0b. Sin cadencia activa. Espera revisión trimestral.
+
+---
+
+## L3c · Rescate fallido
+
+**Sin cadencia.** El líder queda en L0b hasta revisión trimestral de Alex.
+**Reactivación:** Alex decide manualmente si re-nominar o sustituir.
+
+---
+
+## Resumen visual L3
+
+```
+Warmups caen bajo umbral (3 sem) o sin reporte (2 sem)
+  │
+  ├── ¿Tiene rehab plan? → L3a · Rescate suave (14d)
+  │     Día 0:  Chat Aurya + WA Lorena  (diagnóstico)
+  │     Día 7:  Chat Aurya              (seguimiento)
+  │     Día 14: Push + WA Lorena        (límite)
+  │     Sin retoma → escala a L3b
+  │
+  └── ¿Sin rehab plan? → L3b · Rescate completo (21d)
+        Día 0:  Push + WA Lorena        (directo · videollamada)
+        Día 7:  Push + Chat Aurya       (seguimiento videollamada)
+        Día 14: WA Lorena               (aviso crítico)
+        Día 21: WA Lorena               (cierre → L3c → L0b)
+
+  Si retoma warmup en cualquier punto → exit a L1
+  Si no retoma tras ventana → L3c → L0b → revisión trimestral
+```
+
+---
 
 ---
 
 ## Pendiente de definir
 
-- [ ] Definición correcta de sub-estados L3 (opción A vs B)
-- [ ] Mensajes de rescate L3a y L3b (se escriben tras resolver lo anterior)
-- [ ] Videollamada en L3b — Lorena propone por WhatsApp (¿días disponibles?)
 - [ ] In-app especial en transición L1→L2 (modal/badge/animación) · con Inhar
 - [ ] Denominador de asistencia (% equipo presente como criterio)
-- [ ] Frecuencia diana warmups/semana (¿varía por centro?)
+- [ ] Frecuencia diana warmups/semana por tier (¿varía por centro?)
 - [ ] Track A solo vs Track A + Track B en L2 (reconocimiento base vs. gamificación)
 - [ ] Criterio operativo para L2 activo · qué señales mira Alex
+- [ ] Read tracking disponible → actualizar mensajes leído/no leído con variantes reales
